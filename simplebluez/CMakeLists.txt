@@ -15,8 +15,14 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/epilogue.cmake)
 
 option(LIBFMT_VENDORIZE "Enable vendorized libfmt" ON)
 
-find_package(fmt REQUIRED)
-set_target_properties(fmt PROPERTIES EXCLUDE_FROM_ALL TRUE)
+if(NOT TARGET fmt::fmt-header-only)
+    option(LIBFMT_VENDORIZE "Enable vendorized libfmt" ON)
+    find_package(fmt REQUIRED)
+
+    if(TARGET fmt)
+        set_target_properties(fmt PROPERTIES EXCLUDE_FROM_ALL TRUE)
+    endif()
+endif()
 
 find_package(DBus1 REQUIRED)
 
